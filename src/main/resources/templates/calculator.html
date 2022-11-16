@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" th:replace="main :: main_layout(~{::title},~{::div[@id='content']})" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Calculator</title>
+  </head>
+  <body>
+    <div class="container-fluid" id="content">
+    	<div class="row">
+		    <div class="col-12">
+		    	&nbsp;
+		    </div>
+    	</div>
+	    <div class="row">
+		    <div class="col-6 bg-light">
+		        <h1 class="fw-bold">HTMX calculator</h1>
+		        <p>An online calculator for which no calculations are performed on the client yet without pages reload
+		         and no JavaScript use.</p>
+		        <p>See <a href="https://htmx.org/">https://htmx.org/</a></p>
+		        <p>The calculator is implemented in Java using SpringBoot and Thymleaf.</p>
+		    </div>
+		    <div class="col-6">
+		    	<table style="margin:auto">
+		    		<tr>
+		    			<td colspan="4">
+			    			<div class="card">
+							  <div class="card-body text-end">
+							  	<img width="32" height="32" class="htmx-indicator" id="calculator_indicator" src="/spinner.gif"/>
+							    <span id="calculator_display" th:text="${currentValue}">0</span>
+							  </div>
+							</div>
+		    			</td>
+		    		</tr>
+		    		<tr>
+		    			<td><button type="button" class="btn btn-primary" style="width: 4em" hx-get="/reset" hx-indicator="#calculator_indicator" hx-target="#calculator_display">C</button></td>
+		    			<td></td>
+		    			<td></td>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_operation/DIVISION" hx-indicator="#calculator_indicator" hx-target="#calculator_display">&divide;</button></td>
+		    		</tr>
+		    		<tr>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_number/7" hx-indicator="#calculator_indicator" hx-target="#calculator_display">7</button></td>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_number/8" hx-indicator="#calculator_indicator" hx-target="#calculator_display">8</button></td>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_number/9" hx-indicator="#calculator_indicator" hx-target="#calculator_display">9</button></td>
+			    		<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_operation/MULTIPLICATION" hx-indicator="#calculator_indicator" hx-target="#calculator_display">&times;</button></td>
+		    		</tr>
+		    		<tr>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_number/4" hx-indicator="#calculator_indicator" hx-target="#calculator_display">4</button></td>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_number/5" hx-indicator="#calculator_indicator" hx-target="#calculator_display">5</button></td>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_number/6" hx-indicator="#calculator_indicator" hx-target="#calculator_display">6</button></td>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_operation/SUBSTRACTION" hx-indicator="#calculator_indicator" hx-target="#calculator_display">-</button></td>
+		    		</tr>
+		    		<tr>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_number/1" hx-indicator="#calculator_indicator" hx-target="#calculator_display">1</button></td>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_number/2" hx-indicator="#calculator_indicator" hx-target="#calculator_display">2</button></td>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_number/3" hx-indicator="#calculator_indicator" hx-target="#calculator_display">3</button></td>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_operation/ADDITION" hx-indicator="#calculator_indicator" hx-target="#calculator_display">+</button></td>
+		    		</tr>
+		    		<tr>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/negate" hx-indicator="#calculator_indicator" hx-target="#calculator_display">+/-</button></td>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/set_number/0" hx-indicator="#calculator_indicator" hx-target="#calculator_display">0</button></td>
+		    			<td><button type="button" class="btn btn-secondary" style="width: 4em" hx-get="/decimal" hx-indicator="#calculator_indicator" hx-target="#calculator_display">.</button></td>
+		    			<td><button type="button" class="btn btn-primary" style="width: 4em" hx-get="/equal" hx-indicator="#calculator_indicator" hx-target="#calculator_display">=</button></td>
+		    		</tr>
+		    	</table>
+		    </div>
+		</div>
+    	<div class="row">
+		    <div class="col-12 text-start">
+		    	<small th:text="${stateId}"></small>
+		    </div>
+    	</div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+  </body>
+</html>
