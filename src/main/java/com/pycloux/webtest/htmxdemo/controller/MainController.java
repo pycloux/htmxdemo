@@ -1,7 +1,12 @@
 package com.pycloux.webtest.htmxdemo.controller;
 
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.pycloux.webtest.htmxdemo.bean.CalculatorState;
 import com.pycloux.webtest.htmxdemo.service.CalculatorService;
 import com.pycloux.webtest.htmxdemo.service.CalculatorService.CalculatorOperation;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Sinks;
 
 @Controller
 public class MainController{
@@ -25,6 +33,8 @@ public class MainController{
 	
 	@Value("${network.latency}")
 	private int latency;
+
+	private Sinks.Many<String> lastValueEquals=Sinks.many().multicast().onBackpressureBuffer();
 	
 	@GetMapping("/version")
 	public String version(Model model) {
@@ -93,7 +103,9 @@ public class MainController{
 	@ResponseBody
 	public String equalPressed() {
 		calculator.compute(state);
-		return formatValueForDisplay(state.getCurrentValue());
+		String lastValue = formatValueForDisplay(state.getCurrentValue());
+		lastValueEquals.tryEmitNext(lastValue);
+		return lastValue;
 	}
 	
 	/**
@@ -116,6 +128,25 @@ public class MainController{
 	public String decimalPressed() {
 		calculator.decimal(state);
 		return formatValueForDisplay(state.getCurrentValue());
+	}
+
+/**
+	 * Pushing the current hour
+	 * @return
+	 */
+	@GetMapping(path = "/time_of_day", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public Flux<String> streamFlux() {
+	    return Flux.interval(Duration.ofSeconds(1))
+	      .map(sequence -> LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss")));
+	}
+	
+	/**
+	 * Value displayed with the last time the "=" was pressed
+	 * @return
+	 */
+	@GetMapping(path = "/last_equals_pressed", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public Flux<String> lastEqualsPressed(){
+		return lastValueEquals.asFlux();
 	}
 	
 	/**

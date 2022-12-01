@@ -17,6 +17,14 @@
 		         and no JavaScript use.</p>
 		        <p>See <a href="https://htmx.org/">https://htmx.org/</a></p>
 		        <p>The calculator is implemented in Java using SpringBoot and Thymleaf.</p>
+				<p>
+				Server controlled time of day :
+				<span hx-sse="connect:/time_of_day swap:message"></span>
+				</p>
+				<p>
+				Last equals value:
+				<span hx-sse="connect:/last_equals_pressed swap:message"></span>
+				</p>
 		    </div>
 		    <div class="col-6">
 		    	<table style="margin:auto">
