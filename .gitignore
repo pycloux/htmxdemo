@@ -43,3 +43,4 @@ bin/
 build/
 .settings/
 .gradle/
+.devcontainer/
